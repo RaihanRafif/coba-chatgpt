@@ -1,95 +1,161 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+
+import Image from "next/image";
+import { useState } from "react";
+import ConfirmElement from "@/components/confirm-element/confirmElement";
+import { useRouter } from "next/navigation"; // Changed from "next/navigation"
+import CloseButton from "@/components/close-button/closeButton";
+import Footer from "@/components/footer/footer";
 
 export default function Home() {
+  const router = useRouter();
+
+  if (typeof window !== "undefined") {
+    // Code using localStorage
+    localStorage.getItem("mapIndex") === null
+      ? localStorage.setItem("mapIndex", "0") // Ensure setting string "0"
+      : "";
+  }
+
+  const [showUtilSection, setShowUtilSection] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  const onProceedButtonClick = () => {
+    setShowUtilSection(true);
+  };
+
+  const onConfirmButtonClick = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const handleCancel = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const goToUnitPage = () => {
+    router.push("/unit/control");
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <ConfirmElement
+        message="Are you sure you want to close this app?"
+        status={showConfirmDialog}
+        onCancel={handleCancel}
+      />
+      <div className="centered-content">
+        <CloseButton onClick={onConfirmButtonClick} />
+        <div className="greetings">
+          <p>Hello Username, welcome to the MSD700 application!</p>
+        </div>
+
+        <div className="data-section">
+          <div>
+            <div className="label-section">
+              <p>
+                <span>
+                  <Image
+                    src="/icons/information-circle-svgrepo-com.svg"
+                    alt="Picture of the author"
+                    width={500}
+                    height={500}
+                  />
+                </span>
+                Please input your MSD700 unit data.
+              </p>
+            </div>
+            <div className="input-section">
+              <form action="#" method="post">
+                <div className="inputUnit">
+                  <label htmlFor="unitID">Unit ID</label>
+                  <p className="separateElement">:</p>
+                  <input
+                    type="text"
+                    id="unitID"
+                    name="unitID"
+                    defaultValue="Unit A"
+                    required
+                  />
+                </div>
+
+                <div className="inputUnit">
+                  <label htmlFor="ipAddress">IP Address</label>
+                  <p className="separateElement">:</p>
+                  <input
+                    type="text"
+                    id="ipAddress"
+                    name="ipAddress"
+                    defaultValue="192.168.18.17"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit" // Specify the type as submit
+                  onClick={onProceedButtonClick}
+                >
+                  Proceed
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div
+            className={`util_section ${showUtilSection === true ? "show-class" : "hide-class"
+              }`}
           >
-            By{' '}
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+              src="/images/MSD700.png"
+              alt="Picture of the author"
+              width={350}
+              height={264}
             />
-          </a>
+            <div className="data_util">
+              <form action="#" method="post">
+                <div className="inputUnit">
+                  <label htmlFor="battery">Battery</label>
+                  <p className="separateElement">:</p>
+                  <input
+                    type="text"
+                    id="battery"
+                    name="battery"
+                    defaultValue="50%"
+                    required
+                  />
+                </div>
+
+                <div className="inputUnit">
+                  <label htmlFor="uptime">Uptime</label>
+                  <p className="separateElement">:</p>
+                  <input
+                    type="text"
+                    id="uptime"
+                    name="uptime"
+                    defaultValue="05:33:00"
+                    required
+                  />
+                </div>
+              </form>
+            </div>
+            <button
+              onClick={goToUnitPage}
+              aria-label="Submit form Button"
+              className="submit_button"
+            >
+              <p>Login</p>
+              <Image
+                src="/icons/arrow-right-3-svgrepo-com (1).svg"
+                alt=""
+                width={500}
+                height={500}
+              />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className="theFooter">
+        <Footer status={true} />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </>
+  );
 }
